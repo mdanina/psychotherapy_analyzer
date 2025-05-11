@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Психотерапевтический визуализатор</title>
+  
+  <!-- Библиотеки React -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  
+  <!-- Библиотека Babel для трансляции JSX -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  
+  <!-- Иконки и компоненты -->
+  <script src="https://unpkg.com/lucide-react@0.263.1/dist/umd/lucide-react.min.js"></script>
+  <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+  
+  <!-- Стили Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    #root {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <h1>Загрузка визуализатора...</h1>
+    <p>Если это сообщение не исчезает, возможно, возникла проблема с загрузкой JavaScript.</p>
+  </div>
+  
+  <!-- Скрипт визуализатора -->
+  <script type="text/babel" src="visualizer.jsx"></script>
+  
+  <!-- Инициализация -->
+  <script type="text/babel">
+    // Компонент-обертка для обработки ошибок
+    class ErrorBoundary extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = { hasError: false, error: null };
+      }
+      
+      static getDerivedStateFromError(error) {
+        return { hasError: true, error };
+      }
+      
+      render() {
+        if (this.state.hasError) {
+          return (
+            <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+              <h2 className="text-xl font-bold mb-2">Возникла ошибка:</h2>
+              <pre className="bg-white p-2 rounded">{this.state.error?.toString()}</pre>
+              <p className="mt-2">Пожалуйста, проверьте консоль браузера для дополнительной информации (F12 → вкладка "Консоль").</p>
+            </div>
+          );
+        }
+        return this.props.children;
+      }
+    }
+    
+    // Запускаем визуализатор с обработкой ошибок
+    ReactDOM.render(
+      <ErrorBoundary>
+        <PsychotherapyVisualizer />
+      </ErrorBoundary>,
+      document.getElementById('root')
+    );
+  </script>
+</body>
+</html>
